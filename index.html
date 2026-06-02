@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全台最美「鐵道櫻花廊道」</title>
+    <!-- 引入 Tailwind CSS 進行快速排版 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google 字體：思源宋體，增加文學與浪漫感 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background-color: #fce7f3; /* 預設粉色背景，影片載入前顯示 */
+        }
+        
+        /* 玻璃擬態卡片特效 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+
+        /* 文字陰影，確保在影片背景上依然清晰可讀 */
+        .text-shadow-sm {
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        .text-shadow-lg {
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+        }
+
+        /* 落花特效 CSS */
+        #petal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+        
+        .petal {
+            position: absolute;
+            background-color: #ffb7c5;
+            border-radius: 150% 0 150% 0;
+            opacity: 0.8;
+            box-shadow: 0 0 5px rgba(255, 183, 197, 0.5);
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10%;
+                transform: translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                top: 110%;
+                transform: translateX(150px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+    <!-- 影片背景 (請確保影片檔案與此 HTML 檔案位於同一資料夾下) -->
+    <!-- 使用亮度過濾器 (brightness-75) 讓影片稍微變暗，凸顯前方文字 -->
+    <video 
+        autoplay 
+        loop 
+        muted 
+        playsinline 
+        class="absolute z-0 w-auto min-w-full min-h-full max-w-none object-cover brightness-75 transition-all duration-1000"
+    >
+        <source src="Adobe Express - 20260410_134909.mp4" type="video/mp4">
+        您的瀏覽器不支援影片播放標籤。
+    </video>
+
+    <!-- 飄落花瓣的容器 -->
+    <div id="petal-container"></div>
+
+    <!-- 主要內容區 -->
+    <div class="relative z-10 w-full max-w-5xl px-4 py-8 mx-auto flex flex-col items-center">
+        
+        <!-- 玻璃卡片 -->
+        <div class="glass-card rounded-3xl p-8 md:p-14 text-center transform transition duration-700 hover:scale-[1.02]">
+            
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-8 tracking-wider text-shadow-lg leading-tight">
+                全台最美<br class="md:hidden">「鐵道櫻花廊道」現身！
+            </h1>
+            
+            <!-- 裝飾線 -->
+            <div class="w-32 h-1 bg-pink-400 mx-auto mb-8 rounded-full shadow-lg opacity-80"></div>
+            
+            <p class="text-lg md:text-2xl lg:text-3xl text-white font-semibold leading-relaxed text-shadow-sm mb-6">
+                位於彰化二水的花旗木近日迎來大爆發，<br class="hidden md:block">
+                粉色花海沿著台鐵集集支線綿延綻放。
+            </p>
+            
+            <p class="text-md md:text-xl lg:text-2xl text-pink-50 font-medium leading-relaxed text-shadow-sm">
+                列車穿梭其間的夢幻場景，<br class="hidden md:block">
+                猶如駛進粉紅童話。
+            </p>
+
+            <!-- 裝飾性按鈕 -->
+            <div class="mt-12">
+                <button id="start-journey-btn" class="group relative px-8 py-3 bg-pink-500/80 hover:bg-pink-500 text-white font-bold rounded-full backdrop-blur-sm transition-all duration-300 shadow-[0_0_15px_rgba(236,72,153,0.5)] border border-pink-300/50 hover:shadow-[0_0_25px_rgba(236,72,153,0.8)]">
+                    <span class="tracking-widest">展開夢幻旅程</span>
+                    <span class="absolute inset-0 rounded-full border border-white opacity-0 group-hover:animate-ping"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部漸層，增加視覺深度 -->
+    <div class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-pink-900/60 to-transparent z-0 pointer-events-none"></div>
+
+    <!-- 彈出式訊息視窗 (Modal) -->
+    <div id="journey-modal" class="fixed inset-0 z-50 hidden flex-col items-center justify-center">
+        <!-- 半透明遮罩 -->
+        <div id="modal-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm cursor-pointer transition-opacity duration-300 opacity-0"></div>
+        
+        <!-- 視窗內容 -->
+        <div id="modal-content" class="relative z-10 bg-white/85 backdrop-blur-lg p-8 md:p-12 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] max-w-md w-[90%] text-center transform scale-95 opacity-0 transition-all duration-300 border border-white/40">
+            <h2 class="text-3xl font-black text-pink-600 mb-4 tracking-wider">準備出發！</h2>
+            <div class="w-16 h-1 bg-pink-400 mx-auto mb-6 rounded-full opacity-80"></div>
+            <p class="text-lg text-gray-800 font-medium mb-8 leading-relaxed">
+                快收拾行囊，搭乘台鐵集集支線前往彰化二水，親眼見證這片夢幻的粉紅童話吧！
+            </p>
+            <button id="close-modal-btn" class="px-8 py-3 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-full transition-colors shadow-lg tracking-wider">
+                馬上出發
+            </button>
+        </div>
+    </div>
+
+    <!-- 生成落花特效與按鈕互動的 JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const petalContainer = document.getElementById("petal-container");
+            const petalCount = 40; // 花瓣數量
+
+            for (let i = 0; i < petalCount; i++) {
+                let petal = document.createElement("div");
+                petal.classList.add("petal");
+                
+                // 隨機生成起始位置 (涵蓋整個寬度，甚至稍微超出螢幕左側以營造風吹效果)
+                petal.style.left = (Math.random() * 120 - 10) + "vw";
+                
+                // 隨機生成大小
+                const size = Math.random() * 12 + 10;
+                petal.style.width = size + "px";
+                petal.style.height = size + "px";
+                
+                // 隨機落下時間與延遲時間
+                petal.style.animationDuration = (Math.random() * 5 + 6) + "s";
+                petal.style.animationDelay = (Math.random() * 10) + "s";
+                
+                // 隨機旋轉與變形，讓花瓣看起來更自然
+                const rotation = Math.random() * 360;
+                petal.style.transform = `rotate(${rotation}deg)`;
+                
+                petalContainer.appendChild(petal);
+            }
+
+            // --- 互動視窗 (Modal) 邏輯 ---
+            const startBtn = document.getElementById("start-journey-btn");
+            const modal = document.getElementById("journey-modal");
+            const backdrop = document.getElementById("modal-backdrop");
+            const modalContent = document.getElementById("modal-content");
+            const closeBtn = document.getElementById("close-modal-btn");
+
+            // 打開視窗函數
+            startBtn.addEventListener("click", () => {
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+                
+                // 使用微小延遲讓 transition 特效能順利觸發
+                setTimeout(() => {
+                    backdrop.classList.remove("opacity-0");
+                    backdrop.classList.add("opacity-100");
+                    modalContent.classList.remove("scale-95", "opacity-0");
+                    modalContent.classList.add("scale-100", "opacity-100");
+                }, 10);
+            });
+
+            // 關閉視窗函數
+            const closeModal = () => {
+                backdrop.classList.remove("opacity-100");
+                backdrop.classList.add("opacity-0");
+                modalContent.classList.remove("scale-100", "opacity-100");
+                modalContent.classList.add("scale-95", "opacity-0");
+                
+                // 等待淡出動畫結束後再隱藏 DOM
+                setTimeout(() => {
+                    modal.classList.add("hidden");
+                    modal.classList.remove("flex");
+                }, 300);
+            };
+
+            // 綁定關閉事件（點按鈕或點擊半透明背景皆可關閉）
+            closeBtn.addEventListener("click", closeModal);
+            backdrop.addEventListener("click", closeModal);
+        });
+    </script>
+</body>
+</html>
